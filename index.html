@@ -167,6 +167,14 @@
 <main>
 
   <section>
+    <h2><span class="no">00</span>診断モード</h2>
+    <div class="chip-group" data-group="mode">
+      <div class="chip active" data-v="snapshot">スナップショット（今の体質）</div><div class="chip" data-v="domino">ドミノ時系列（崩れの経過を追う）</div>
+    </div>
+    <p class="kootei-help" style="margin-top:8px;">ドミノ時系列を選ぶと、下に時間軸の質問欄が増え、出力の依頼内容も「起点→波及→現在」の物語型に切り替わります。</p>
+  </section>
+
+  <section>
     <h2><span class="no">01</span>基本情報</h2>
     <div class="row2">
       <div><label>年齢</label><input type="text" id="age" placeholder="例：58"></div>
@@ -208,7 +216,7 @@
 
     <h3>便通</h3>
     <div class="chip-group" data-group="stool">
-      <div class="chip" data-v="硬め">硬め</div><div class="chip" data-v="軟便">軟便</div><div class="chip" data-v="下痢気味">下痢気味</div><div class="chip" data-v="便秘気味">便秘気味</div><div class="chip" data-v="日による">日による</div>
+      <div class="chip" data-v="普通">普通</div><div class="chip" data-v="硬め">硬め</div><div class="chip" data-v="軟便">軟便</div><div class="chip" data-v="下痢気味">下痢気味</div><div class="chip" data-v="便秘気味">便秘気味</div><div class="chip" data-v="日による">日による</div>
     </div>
 
     <h3>尿</h3>
@@ -224,10 +232,8 @@
       <div class="chip" data-v="入眠困難">入眠困難</div><div class="chip" data-v="中途覚醒">中途覚醒</div><div class="chip" data-v="早朝覚醒">早朝覚醒</div><div class="chip" data-v="夢が多い">夢が多い</div><div class="chip" data-v="問題なし">問題なし</div>
     </div>
 
-    <h3>メンタル傾向</h3>
-    <div class="chip-group" data-group="mental" data-multi="true">
-      <div class="chip" data-v="不安">不安</div><div class="chip" data-v="イライラ">イライラ</div><div class="chip" data-v="落ち込み">落ち込み</div><div class="chip" data-v="思考過多">思考過多</div>
-    </div>
+    <h3>メンタル傾向（それぞれ0〜10）</h3>
+    <div id="sliderMental"></div>
 
     <h3>舌の状態</h3>
     <div class="row2">
@@ -241,7 +247,7 @@
 
     <h3>脈</h3>
     <div class="chip-group" data-group="pulse" data-multi="true">
-      <div class="chip" data-v="速い">速い</div><div class="chip" data-v="遅い">遅い</div><div class="chip" data-v="弱い">弱い</div><div class="chip" data-v="強い">強い</div>
+      <div class="chip" data-v="普通">普通</div><div class="chip" data-v="速い">速い</div><div class="chip" data-v="遅い">遅い</div><div class="chip" data-v="弱い">弱い</div><div class="chip" data-v="強い">強い</div>
     </div>
   </section>
 
@@ -261,6 +267,7 @@
     <div class="chip-group" data-group="bath">
       <div class="chip" data-v="湯船につかる">湯船につかる</div><div class="chip" data-v="シャワーのみ">シャワーのみ</div>
     </div>
+    <input type="text" id="bathNote" placeholder="補足（例：たまに足湯／半身浴など）" style="margin-top:6px;">
     <label>ストレス源</label>
     <textarea id="stress" placeholder="仕事・人間関係など"></textarea>
   </section>
@@ -286,17 +293,9 @@
     <h3>温度・味・脂の傾向</h3>
     <div id="sliderFood2"></div>
 
-    <h3>湿をためやすい食品（頻度：週何回）</h3>
-    <div class="row2">
-      <input type="text" id="wheat" placeholder="小麦（パン・麺）週">
-      <input type="text" id="dairy" placeholder="乳製品　週">
-    </div>
-    <div class="row2" style="margin-top:8px;">
-      <input type="text" id="processed" placeholder="惣菜・加工食品　週">
-      <input type="text" id="eatingOut" placeholder="外食　週">
-    </div>
-    <label>アルコール（週）</label>
-    <input type="text" id="alcoholWeek" placeholder="例：週3回">
+    <h3>湿をためやすい食品（週に何回「食べた日」があるか）</h3>
+    <p class="kootei-help">1日に朝・昼・晩のどこかで1回でも食べたら、その日を1回とカウントしてください（同じ日に何度食べても1回）</p>
+    <div id="sliderFreq"></div>
 
     <h3>水分</h3>
     <div class="row3">
@@ -314,8 +313,22 @@
     </div>
   </section>
 
+  <section id="timeAxisSection" style="display:none;">
+    <h2><span class="no">05</span>時間軸（ドミノ起点分析用）</h2>
+    <label>一番元気だった時期</label>
+    <input type="text" id="ta_best" placeholder="例：2020年頃、30代の頃など">
+    <label>崩れ始めた時期</label>
+    <input type="text" id="ta_start" placeholder="例：2024年8月頃">
+    <label>その前の生活変化</label>
+    <textarea id="ta_change" placeholder="転職・引越し・人間関係の変化など"></textarea>
+    <label>発症前に無理していたこと</label>
+    <textarea id="ta_overwork" placeholder="睡眠不足・働きすぎ・我慢していたことなど"></textarea>
+    <label>季節での悪化傾向</label>
+    <input type="text" id="ta_season" placeholder="例：冬に悪化する／梅雨時期がつらい／特になし">
+  </section>
+
   <section>
-    <h2><span class="no">05</span>希望</h2>
+    <h2><span class="no">06</span>希望</h2>
     <label>改善したいこと（優先順位も）</label>
     <textarea id="goals" placeholder="例：1.疲労感 2.むくみ 3.睡眠の質"></textarea>
     <label>今できる範囲</label>
@@ -325,7 +338,7 @@
   <button class="main-btn" onclick="generate()">解釈依頼テキストを作成する</button>
 
   <section id="copySection">
-    <h2><span class="no">06</span>解釈依頼用テキスト</h2>
+    <h2><span class="no">07</span>解釈依頼用テキスト</h2>
     <textarea id="copyText" readonly></textarea>
     <button class="copybtn" onclick="copyResult()">コピーする</button>
     <p class="note">このテキストをそのままClaudeに貼って、体質仮説・優先改善ポイント・具体策の解釈を依頼してください。</p>
@@ -338,12 +351,13 @@
 <script>
 // ===== スライダー生成 =====
 const sliderData = {};
-function makeSlider(container, id, label){
-  sliderData[id] = 5;
+function makeSlider(container, id, label, max, defaultVal){
+  max = max || 10;
+  sliderData[id] = (defaultVal !== undefined) ? defaultVal : Math.round(max/2);
   const row = document.createElement('div');
   row.className = 'slider-row';
-  row.innerHTML = `<div class="sl-label"><span>${label}</span><span class="val" id="val_${id}">5</span></div>
-    <input type="range" min="0" max="10" value="5" id="sl_${id}">`;
+  row.innerHTML = `<div class="sl-label"><span>${label}</span><span class="val" id="val_${id}">${sliderData[id]}</span></div>
+    <input type="range" min="0" max="${max}" value="${sliderData[id]}" id="sl_${id}">`;
   container.appendChild(row);
   row.querySelector('input').addEventListener('input', (e)=>{
     sliderData[id] = parseInt(e.target.value);
@@ -353,11 +367,18 @@ function makeSlider(container, id, label){
 
 const symptomSliders = [
   ['fatigue','疲れやすい'], ['cold','冷え'], ['flush','のぼせ/ほてり'],
-  ['bloating','胃もたれ/膨満感'], ['edema','むくみ'], ['stiffness','肩こり/頭痛'],
-  ['mentalScore','メンタルの負荷感']
+  ['bloating','胃もたれ'], ['distension','膨満感'], ['edema','むくみ'], ['stiffness','肩こり/頭痛']
 ];
 const c1 = document.getElementById('sliderSymptoms');
 symptomSliders.forEach(([id,label])=>makeSlider(c1,id,label));
+
+const mentalSliders = [['anxiety','不安'],['irritation','イライラ'],['depression','落ち込み'],['overthink','思考過多']];
+const cMental = document.getElementById('sliderMental');
+mentalSliders.forEach(([id,label])=>makeSlider(cMental,id,label));
+
+const freqSliders = [['wheat','小麦（パン・麺）'],['dairy','乳製品'],['processed','惣菜・加工食品'],['eatingOut','外食'],['alcoholWeek','アルコール']];
+const cFreq = document.getElementById('sliderFreq');
+freqSliders.forEach(([id,label])=>makeSlider(cFreq,id,label,7,0));
 
 const food1Sliders = [['earlyEat','早食い度']];
 const c2 = document.getElementById('sliderFood1');
@@ -384,11 +405,11 @@ const c4 = document.getElementById('sliderFood3');
 food3Sliders.forEach(([id,label])=>makeSlider(c4,id,label));
 
 // ===== チップ選択 =====
-const chipData = {};
+const chipData = {mode:'snapshot'};
 document.querySelectorAll('.chip-group').forEach(group=>{
   const key = group.dataset.group;
   const multi = group.dataset.multi === 'true';
-  chipData[key] = multi ? [] : null;
+  if(key !== 'mode') chipData[key] = multi ? [] : null;
   group.querySelectorAll('.chip').forEach(chip=>{
     chip.addEventListener('click', ()=>{
       const v = chip.dataset.v;
@@ -405,6 +426,9 @@ document.querySelectorAll('.chip-group').forEach(group=>{
         group.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
         chip.classList.add('active');
       }
+      if(key==='mode'){
+        document.getElementById('timeAxisSection').style.display = (v==='domino') ? 'block' : 'none';
+      }
     });
   });
 });
@@ -417,31 +441,64 @@ function chipStr(key){
 }
 
 function generate(){
+  const mode = chipData.mode;
   let out = '';
   out += '━━━━━━━━━━━━━━━━━━━━━━━\n';
   out += 'あなたは東洋医学（中医学）の専門家です。\n';
   out += '断定しすぎず、与えられた情報から「確度つきの仮説」を立ててください。\n';
   out += '必ず【事実】と【推定】を分け、根拠（どの情報からそう判断したか）を短く添えてください。\n';
   out += '━━━━━━━━━━━━━━━━━━━━━━━\n';
-  out += '■目的\n';
-  out += '以下の情報から\n';
-  out += '1. 体質推定（虚実 / 寒熱 / 燥湿 / 気血水 / 臓腑）\n';
-  out += '2. 三層構造分析（ベース体質／停滞要因／消耗要因）\n';
-  out += '3. 優先改善ポイントTOP3（理由つき）\n';
-  out += '4. 今日からできる食事・生活アドバイス（最小限に絞る）\n';
-  out += '5. 薬膳食材の提案（今の体質で「何を補うべきか（気/血/陰/陽/腎精など）」を明示したうえで、\n';
-  out += '　 それを補う具体的な食材を3〜5品目。各食材について「なぜこの体質パターンに合うか」を、\n';
-  out += '　 単に効能を並べるのではなく、複数の要因（例：補いたいが湿は増やしたくない等）との\n';
-  out += '　 兼ね合いで理由づけすること。単独では注意が必要な食材があれば、その理由と\n';
-  out += '　 組み合わせ方も添える。日常で入手しやすいものを優先し、避けた方がよい食材があれば併記する）\n';
-  out += 'を論理的に提示してください。\n';
-  out += '━━━━━━━━━━━━━━━━━━━━━━━\n';
-  out += '■出力ルール\n';
-  out += '・最初に「結論サマリ（3行）」\n';
-  out += '・次に「根拠（事実→推定）」\n';
-  out += '・最後に「具体策」\n';
-  out += '・体質は最大3つまで。各体質に確度（高/中/低）をつける\n';
-  out += '・不明情報が多い場合のみ、追加質問を最大5つ（理由つき）\n';
+  if(mode === 'domino'){
+    out += '■目的\n';
+    out += '以下の情報から\n';
+    out += '① 体質推定（最大3つ・確度つき）\n';
+    out += '② ドミノ起点の特定（最初に崩れた可能性の高い臓腑と、その理由〈事実→推定〉）\n';
+    out += '③ 時間軸ストーリー（崩れ始め／波及経路／現在の状態）\n';
+    out += '④ 現在の中核問題（1つに絞る。腎が関与する場合は腎精／腎陽／腎陰のどれが主問題か明示）\n';
+    out += '⑤ 最優先整流アクション1本（なぜ最優先か／具体的な実行方法／続けた場合の変化予測／\n';
+    out += '　 やらなかった場合の停滞予測）\n';
+    out += '⑥ 薬膳食材の提案（今の中核問題で「何を補うべきか」を明示したうえで、具体的な食材を\n';
+    out += '　 3〜5品目。複数の要因との兼ね合いで理由づけすること）\n';
+    out += '⑦ やさしい解説（①〜⑥を専門用語なしで、理由を省略せず詳しく説明し直す）\n';
+    out += 'を論理的に提示してください。\n';
+    out += '━━━━━━━━━━━━━━━━━━━━━━━\n';
+    out += '■出力構造\n';
+    out += '【結論サマリ（3行）】\n';
+    out += '【1. 体質推定】虚実/寒熱/燥湿/気血水/臓腑　※最大3つ・確度（高/中/低）\n';
+    out += '【2. ドミノ起点（推定）】最初に崩れた可能性の高い臓腑と理由（事実→推定）\n';
+    out += '【3. 時間軸ストーリー】崩れ始め／波及経路／現在の状態\n';
+    out += '【4. 現在の中核問題】（1つに絞る）\n';
+    out += '【5. 最優先整流アクション（1本のみ）】\n';
+    out += '【6. 薬膳食材の提案】\n';
+    out += '【7. やさしい解説】\n';
+    out += '【受診推奨が必要な場合は明示】\n';
+    out += '━━━━━━━━━━━━━━━━━━━━━━━\n';
+    out += '■時間軸質問（情報不足時のみ最大5つ、質問理由も添える）\n';
+    out += '━━━━━━━━━━━━━━━━━━━━━━━\n';
+  } else {
+    out += '■目的\n';
+    out += '以下の情報から\n';
+    out += '1. 体質推定（虚実 / 寒熱 / 燥湿 / 気血水 / 臓腑）\n';
+    out += '2. 三層構造分析（ベース体質／停滞要因／消耗要因）\n';
+    out += '3. 優先改善ポイントTOP3（理由つき）\n';
+    out += '4. 今日からできる食事・生活アドバイス（最小限に絞る）\n';
+    out += '5. 薬膳食材の提案（今の体質で「何を補うべきか（気/血/陰/陽/腎精など）」を明示したうえで、\n';
+    out += '　 それを補う具体的な食材を3〜5品目。各食材について「なぜこの体質パターンに合うか」を、\n';
+    out += '　 単に効能を並べるのではなく、複数の要因（例：補いたいが湿は増やしたくない等）との\n';
+    out += '　 兼ね合いで理由づけすること。単独では注意が必要な食材があれば、その理由と\n';
+    out += '　 組み合わせ方も添える。日常で入手しやすいものを優先し、避けた方がよい食材があれば併記する）\n';
+    out += '6. やさしい解説（1〜5の内容を、専門用語（虚実・寒熱・燥湿・気血水・臓腑・気滞など）を\n';
+    out += '　 一切使わずに、日常の言葉だけで詳しく説明し直す。「なぜそう言えるのか」の理由も\n';
+    out += '　 省略せず、専門知識がない人が読んでも体の状態と対策の理由がしっかり理解できるように書く）\n';
+    out += 'を論理的に提示してください。\n';
+    out += '━━━━━━━━━━━━━━━━━━━━━━━\n';
+    out += '■出力ルール\n';
+    out += '・最初に「結論サマリ（3行）」\n';
+    out += '・次に「根拠（事実→推定）」\n';
+    out += '・最後に「具体策」\n';
+    out += '・体質は最大3つまで。各体質に確度（高/中/低）をつける\n';
+    out += '・不明情報が多い場合のみ、追加質問を最大5つ（理由つき）\n';
+  }
   out += '・医療行為ではなく生活提案として述べる\n';
   out += '・危険サインがあれば受診推奨も添える\n';
   out += '・今回の入力のみに基づいて診断すること。過去の会話・別人の体質チェック結果など、\n';
@@ -459,13 +516,13 @@ function generate(){
   out += `汗：${chipStr('sweat')}\n`;
   out += `口渇：${chipStr('thirst')}\n`;
   out += `食欲：${chipStr('appetite')}\n`;
-  out += `胃もたれ/膨満感：${sliderData.bloating}/10\n`;
+  out += `胃もたれ：${sliderData.bloating}/10　膨満感：${sliderData.distension}/10\n`;
   out += `便通：${chipStr('stool')}\n`;
   out += `尿：回数(${val('urineFreq')})／色(${val('urineColor')})／夜間尿(${val('nightUrine')})\n`;
   out += `むくみ：${sliderData.edema}/10\n`;
   out += `肩こり/頭痛：${sliderData.stiffness}/10\n`;
   out += `睡眠の質：${chipStr('sleepq')}\n`;
-  out += `メンタル：${chipStr('mental')}（負荷感 ${sliderData.mentalScore}/10）\n`;
+  out += `メンタル：不安${sliderData.anxiety}/10　イライラ${sliderData.irritation}/10　落ち込み${sliderData.depression}/10　思考過多${sliderData.overthink}/10\n`;
   out += `舌：色(${val('tongueColor')})／苔(${val('tongueCoat')})／歯痕(${val('tongueTeeth')})／ひび(${val('tongueCrack')})\n`;
   out += `脈：${chipStr('pulse')}\n\n`;
 
@@ -473,7 +530,7 @@ function generate(){
   out += `睡眠時間：${val('sleepHours')}　起床時の状態：${val('wakeState')}\n`;
   out += `運動：${val('exercise')}\n`;
   out += `飲酒：${val('alcohol')}　カフェイン：${val('caffeine')}\n`;
-  out += `入浴：${chipStr('bath')}\n`;
+  out += `入浴：${chipStr('bath')}${val('bathNote') ? '（'+val('bathNote')+'）' : ''}\n`;
   out += `ストレス源：${val('stress')}\n\n`;
 
   out += '【食習慣（頻度と傾向のみ）】\n';
@@ -481,7 +538,7 @@ function generate(){
   out += `朝食時刻：${val('breakfastTime')}　夕食時刻：${val('dinnerTime')}　就寝2時間以内の食事：週${val('lateEat')}\n`;
   out += `冷たい飲食：${sliderData.coldFood}/10　温かい飲食：${sliderData.warmFood}/10\n`;
   out += `甘い：${sliderData.sweet}/10　脂っこい：${sliderData.oily}/10　塩辛い：${sliderData.salty}/10　辛い：${sliderData.spicy}/10\n`;
-  out += `湿をためやすい食品（週）：小麦${val('wheat')}／乳製品${val('dairy')}／惣菜・加工食品${val('processed')}／外食${val('eatingOut')}／アルコール${val('alcoholWeek')}\n`;
+  out += `湿をためやすい食品（週に食べた日数）：小麦${sliderData.wheat}回／乳製品${sliderData.dairy}回／惣菜・加工食品${sliderData.processed}回／外食${sliderData.eatingOut}回／アルコール${sliderData.alcoholWeek}回\n`;
   out += `水分：1日${val('waterMl')}ml／コーヒー・茶${val('coffeeTea')}杯／夜の水分：${val('nightWater')}\n`;
   out += `胃腸の反応：食後眠くなる${sliderData.sleepyAfter}/10　胃もたれ${sliderData.bloatAfter}/10　ガス・膨満感${sliderData.gas}/10　空腹感が来ない${sliderData.noHunger}/10\n`;
   out += `食後の体感：${chipStr('afterMeal')}\n\n`;
@@ -489,6 +546,15 @@ function generate(){
   out += '【希望】\n';
   out += `改善したいこと（優先順位）：${val('goals')}\n`;
   out += `今できる範囲：${val('capacity')}\n\n`;
+
+  if(mode === 'domino'){
+    out += '【時間軸（ドミノ起点分析用）】\n';
+    out += `一番元気だった時期：${val('ta_best')}\n`;
+    out += `崩れ始めた時期：${val('ta_start')}\n`;
+    out += `その前の生活変化：${val('ta_change')}\n`;
+    out += `発症前に無理していたこと：${val('ta_overwork')}\n`;
+    out += `季節での悪化傾向：${val('ta_season')}\n\n`;
+  }
 
   out += '■注意\n医療行為ではなく生活提案として述べる。危険サインがあれば受診推奨も添える。\n';
 
